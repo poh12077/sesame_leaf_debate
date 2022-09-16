@@ -19,19 +19,27 @@ const pool = mariadb.createPool({
     database: 'test'
 });
 
-app.get('/test.html', function (req, res) {
-    res.sendFile(__dirname + "/test.html")
+app.get('/main.html', function (req, res) {
+    res.sendFile(__dirname + "/main.html")
 })
 
-app.post('/upload', async (req, res) => {
+app.get('/main.css', function (req, res) {
+    res.sendFile(__dirname + "/main.css")
+})
+
+app.post('/update', async (req, res) => {
     try {
     let conn;
     let sql;
-    let column = req.body.column;
-    if (column == 'one') {
-        sql = "update question set one = one +1";
-    }else if ( column=='two'){
-        sql = "update question set two = two +1";
+    let answer = req.body.answer;
+    let question_number = req.body.question_number;
+
+    if (answer == 'one') {
+        sql = "update question set one = one +1 where question_number =" + question_number;
+    }else if ( answer=='two'){
+        sql = "update question set two = two +1 where question_number =" + question_number;
+    }else if ( answer=='three'){
+        sql = "update question set three = three +1 where question_number =" + question_number;
     }
         conn = await pool.getConnection();
         const rows = await conn.query(sql);
